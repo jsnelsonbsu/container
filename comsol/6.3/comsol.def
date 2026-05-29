@@ -1,0 +1,22 @@
+bootstrap: docker
+from: rockylinux:8.9
+
+%environment
+    export LC_ALL=C
+    export PATH=/opt/comsol/bin:$PATH
+
+%files
+    COMSOL63_lnx /opt
+
+
+%post
+    dnf update -y
+    dnf install -y which libXext libXrender libXtst freetype \
+        java-1.8.0-openjdk-devel gtk3 xorg-x11-fonts-Type1 libglvnd-glx
+    dnf clean all
+    /opt/COMSOL63_lnx/setup -s /opt/COMSOL63_lnx/setupconfig.ini
+    rm -rf /opt/COMSOL63_lnx
+
+%labels
+    author Jenny Fothergill <jennyfothergill@boisestate.edu>
+    github.com/bsurc/container git rev={{GIT_REV}}
